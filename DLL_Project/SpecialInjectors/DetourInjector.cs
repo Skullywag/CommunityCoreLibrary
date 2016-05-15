@@ -238,6 +238,28 @@ namespace CommunityCoreLibrary
             if( !Detours.TryDetourFromTo( Verse_CompGlower_ShouldBeLitNow_Getter, CCL_CompGlower_ShouldBeLitNow ) )
                 return false;
 
+            // Detour RimWorld.BiomeDef.CommonalityOfAnimal
+            MethodInfo RimwWorld_BiomeDef_CommonalityOfAnimal = typeof(BiomeDef).GetMethod("CommonalityOfAnimal", BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo CCL_BiomeDef_CommonalityOfAnimal = typeof(_BiomeDef).GetMethod("_CommonalityOfAnimal", BindingFlags.Static | BindingFlags.NonPublic);
+            if (!Detours.TryDetourFromTo(RimwWorld_BiomeDef_CommonalityOfAnimal, CCL_BiomeDef_CommonalityOfAnimal))
+            {
+                return false;
+            }
+            // Detour RimWorld.BiomeDef.CommonalityOfPlant
+            MethodInfo RimwWorld_BiomeDef_CommonalityOfPlantl = typeof(BiomeDef).GetMethod("CommonalityOfPlant", BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo CCL_BiomeDef_CommonalityOfPlantl = typeof(_BiomeDef).GetMethod("_CommonalityOfPlant", BindingFlags.Static | BindingFlags.NonPublic);
+            if (!Detours.TryDetourFromTo(RimwWorld_BiomeDef_CommonalityOfPlantl, CCL_BiomeDef_CommonalityOfPlantl))
+            {
+                return false;
+            }
+            // Detour RimWorld.BiomeDef.MTBDaysOfDisease
+            MethodInfo RimwWorld_BiomeDef_MTBDaysOfDisease = typeof(BiomeDef).GetMethod("MTBDaysOfDisease", BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo CCL_BiomeDef_MTBDaysOfDisease = typeof(_BiomeDef).GetMethod("_MTBDaysOfDisease", BindingFlags.Static | BindingFlags.NonPublic);
+            if (!Detours.TryDetourFromTo(CCL_BiomeDef_MTBDaysOfDisease, CCL_BiomeDef_MTBDaysOfDisease))
+            {
+                return false;
+            }
+
             // Detour RimWorld.MainTabWindow_Research.DrawLeftRect "NotFinished" predicate function
             // Use build number to get the correct predicate function
             var RimWorld_MainTabWindow_Research_DrawLeftRect_NotFinished_Name = string.Empty;
