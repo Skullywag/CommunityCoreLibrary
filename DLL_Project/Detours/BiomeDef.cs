@@ -7,26 +7,56 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using Verse.AI;
 using Verse;
+using System.Reflection;
 
 namespace CommunityCoreLibrary
 {
     internal static class _BiomeDef
     {
         internal static List<BiomePlantRecord> wildPlants = new List<BiomePlantRecord>();
-
         internal static List<BiomeAnimalRecord> wildAnimals = new List<BiomeAnimalRecord>();
-
         internal static List<BiomeDiseaseRecord> diseases = new List<BiomeDiseaseRecord>();
-        [Unsaved]
-        internal static Dictionary<PawnKindDef, float> cachedAnimalCommonalities;
 
-        [Unsaved]
-        internal static Dictionary<ThingDef, float> cachedPlantCommonalities;
+        internal static FieldInfo _cachedAnimalCommonalities;
+        internal static FieldInfo _cachedPlantCommonalities;
+        internal static FieldInfo _cachedDiseaseCommonalities;
 
-        [Unsaved]
-        internal static Dictionary<IncidentDef, float> cachedDiseaseCommonalities;
+        #region Reflected Methods
+
+        internal static Dictionary<PawnKindDef, float> cachedAnimalCommonalities(this BiomeDef obj)
+        {
+            if (_cachedAnimalCommonalities == null)
+            {
+                _cachedAnimalCommonalities = typeof(BiomeDef).GetField("cachedAnimalCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+            return (Dictionary<PawnKindDef, float>)_cachedAnimalCommonalities.GetValue(obj);
+        }
+
+        internal static Dictionary<ThingDef, float> cachedPlantCommonalities(this BiomeDef obj)
+        {
+            if (_cachedPlantCommonalities == null)
+            {
+                _cachedPlantCommonalities = typeof(BiomeDef).GetField("cachedPlantCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+            return (Dictionary<ThingDef, float>)_cachedAnimalCommonalities.GetValue(obj);
+        }
+
+        internal static Dictionary<IncidentDef, float> cachedDiseaseCommonalities(this BiomeDef obj)
+        {
+            if (_cachedDiseaseCommonalities == null)
+            {
+                _cachedDiseaseCommonalities = typeof(BiomeDef).GetField("cachedDiseaseCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+            return (Dictionary<IncidentDef, float>)_cachedDiseaseCommonalities.GetValue(obj);
+        }
+
+        #endregion
+
+        #region Detoured Methods
+
         internal static float _CommonalityOfAnimal(this BiomeDef _this, PawnKindDef animalDef)
         {
+            var cachedAnimalCommonalities = _this.cachedAnimalCommonalities();
             if (cachedAnimalCommonalities == null)
             {
                 cachedAnimalCommonalities = new Dictionary<PawnKindDef, float>();
@@ -50,6 +80,7 @@ namespace CommunityCoreLibrary
 
         internal static float _CommonalityOfPlant(this BiomeDef _this, ThingDef plantDef)
         {
+            var cachedPlantCommonalities = _this.cachedPlantCommonalities();
             if (cachedPlantCommonalities == null)
             {
                 cachedPlantCommonalities = new Dictionary<ThingDef, float>();
@@ -77,6 +108,7 @@ namespace CommunityCoreLibrary
 
         internal static float _MTBDaysOfDisease(this BiomeDef _this, IncidentDef diseaseInc)
         {
+            var cachedDiseaseCommonalities = _this.cachedDiseaseCommonalities();
             if (cachedDiseaseCommonalities == null)
             {
                 cachedDiseaseCommonalities = new Dictionary<IncidentDef, float>();
@@ -101,5 +133,8 @@ namespace CommunityCoreLibrary
             }
             return 9999999f;
         }
+
+        #endregion
+
     }
 }
