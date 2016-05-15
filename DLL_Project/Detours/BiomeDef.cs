@@ -140,6 +140,7 @@ namespace CommunityCoreLibrary
                                 cachedAnimalCommonalities.Add(pawnKindDef.RaceProps.wildBiomes[index].animal, pawnKindDef.RaceProps.wildBiomes[index].commonality);
                     }
                 }
+                _this.cachedAnimalCommonalitiesSet(cachedAnimalCommonalities);
             }
             float num;
             if (cachedAnimalCommonalities.TryGetValue(animalDef, out num))
@@ -166,6 +167,7 @@ namespace CommunityCoreLibrary
                                 cachedPlantCommonalities.Add(current.plant.wildBiomes[index].plant, current.plant.wildBiomes[index].commonality);
                     }
                 }
+                _this.cachedPlantCommonalitiesSet(cachedPlantCommonalities);
             }
             float result;
             if (cachedPlantCommonalities.TryGetValue(plantDef, out result))
@@ -194,6 +196,7 @@ namespace CommunityCoreLibrary
                                 cachedDiseaseCommonalities.Add(current.diseaseBiomeRecords[index].diseaseInc, current.diseaseBiomeRecords[index].mtbDays);
                     }
                 }
+                _this.cachedDiseaseCommonalitiesSet(cachedDiseaseCommonalities);
             }
             float result;
             if (cachedDiseaseCommonalities.TryGetValue(diseaseInc, out result))
@@ -204,6 +207,33 @@ namespace CommunityCoreLibrary
         }
 
         #endregion
+
+        internal static void cachedAnimalCommonalitiesSet(this BiomeDef obj, Dictionary<PawnKindDef, float> value)
+        {
+            if (_cachedAnimalCommonalities == null)
+            {
+                _cachedAnimalCommonalities = typeof(BiomeDef).GetField("cachedAnimalCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+            _cachedAnimalCommonalities.SetValue(obj, value);
+        }
+
+        internal static void cachedPlantCommonalitiesSet(this BiomeDef obj, Dictionary<ThingDef, float> value)
+        {
+            if (_cachedAnimalCommonalities == null)
+            {
+                _cachedAnimalCommonalities = typeof(BiomeDef).GetField("cachedAnimalCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+            _cachedAnimalCommonalities.SetValue(obj, value);
+        }
+
+        internal static void cachedDiseaseCommonalitiesSet(this BiomeDef obj, Dictionary<IncidentDef, float> value)
+        {
+            if (_cachedAnimalCommonalities == null)
+            {
+                _cachedAnimalCommonalities = typeof(BiomeDef).GetField("cachedAnimalCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+            }
+            _cachedAnimalCommonalities.SetValue(obj, value);
+        }
 
     }
 }
