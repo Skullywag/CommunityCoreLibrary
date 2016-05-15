@@ -13,9 +13,9 @@ namespace CommunityCoreLibrary
 {
     internal static class _BiomeDef
     {
-        internal static List<BiomePlantRecord> wildPlants = new List<BiomePlantRecord>();
-        internal static List<BiomeAnimalRecord> wildAnimals = new List<BiomeAnimalRecord>();
-        internal static List<BiomeDiseaseRecord> diseases = new List<BiomeDiseaseRecord>();
+        internal static FieldInfo _wildPlants;
+        internal static FieldInfo _wildAnimals;
+        internal static FieldInfo _diseases;
 
         internal static FieldInfo _cachedAnimalCommonalities;
         internal static FieldInfo _cachedPlantCommonalities;
@@ -23,11 +23,66 @@ namespace CommunityCoreLibrary
 
         #region Reflected Methods
 
+        internal static List<BiomeAnimalRecord> wildAnimals(this BiomeDef obj)
+        {
+            if (_wildAnimals == null)
+            {
+                _wildAnimals = typeof(BiomeDef).GetField("wildAnimals", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (_wildAnimals == null)
+                {
+                    CCL_Log.Trace(
+                        Verbosity.FatalErrors,
+                        "Unable to get field 'wildAnimals' in 'BiomeDef'",
+                        "Internal Detours");
+                }
+            }
+            return (List<BiomeAnimalRecord>)_wildAnimals.GetValue(obj);
+        }
+
+        internal static List<BiomePlantRecord> wildPlants(this BiomeDef obj)
+        {
+            if (_wildPlants == null)
+            {
+                _wildPlants = typeof(BiomeDef).GetField("wildPlants", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (_wildPlants == null)
+                {
+                    CCL_Log.Trace(
+                        Verbosity.FatalErrors,
+                        "Unable to get field 'wildPlants' in 'BiomeDef'",
+                        "Internal Detours");
+                }
+            }
+            return (List<BiomePlantRecord>)_wildPlants.GetValue(obj);
+        }
+
+        internal static List<BiomeDiseaseRecord> diseases(this BiomeDef obj)
+        {
+            if (_diseases == null)
+            {
+                _diseases = typeof(BiomeDef).GetField("diseases", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (_diseases == null)
+                {
+                    CCL_Log.Trace(
+                        Verbosity.FatalErrors,
+                        "Unable to get field 'diseases' in 'BiomeDef'",
+                        "Internal Detours");
+                }
+            }
+            return (List<BiomeDiseaseRecord>)_diseases.GetValue(obj);
+        }
+
         internal static Dictionary<PawnKindDef, float> cachedAnimalCommonalities(this BiomeDef obj)
         {
             if (_cachedAnimalCommonalities == null)
             {
                 _cachedAnimalCommonalities = typeof(BiomeDef).GetField("cachedAnimalCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (_cachedAnimalCommonalities == null)
+                {
+                    CCL_Log.Trace(
+                        Verbosity.FatalErrors,
+                        "Unable to get field 'cachedAnimalCommonalities' in 'BiomeDef'",
+                        "Internal Detours");
+                }
             }
             return (Dictionary<PawnKindDef, float>)_cachedAnimalCommonalities.GetValue(obj);
         }
@@ -37,6 +92,13 @@ namespace CommunityCoreLibrary
             if (_cachedPlantCommonalities == null)
             {
                 _cachedPlantCommonalities = typeof(BiomeDef).GetField("cachedPlantCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (_cachedPlantCommonalities == null)
+                {
+                    CCL_Log.Trace(
+                        Verbosity.FatalErrors,
+                        "Unable to get field 'cachedPlantCommonalities' in 'BiomeDef'",
+                        "Internal Detours");
+                }
             }
             return (Dictionary<ThingDef, float>)_cachedAnimalCommonalities.GetValue(obj);
         }
@@ -46,6 +108,13 @@ namespace CommunityCoreLibrary
             if (_cachedDiseaseCommonalities == null)
             {
                 _cachedDiseaseCommonalities = typeof(BiomeDef).GetField("cachedDiseaseCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (_cachedDiseaseCommonalities == null)
+                {
+                    CCL_Log.Trace(
+                        Verbosity.FatalErrors,
+                        "Unable to get field 'cachedDiseaseCommonalities' in 'BiomeDef'",
+                        "Internal Detours");
+                }
             }
             return (Dictionary<IncidentDef, float>)_cachedDiseaseCommonalities.GetValue(obj);
         }
@@ -60,8 +129,8 @@ namespace CommunityCoreLibrary
             if (cachedAnimalCommonalities == null)
             {
                 cachedAnimalCommonalities = new Dictionary<PawnKindDef, float>();
-                for (int index = 0; index < wildAnimals.Count; ++index)
-                    cachedAnimalCommonalities.Add(wildAnimals[index].animal, wildAnimals[index].commonality);
+                for (int index = 0; index < _this.wildAnimals().Count; ++index)
+                    cachedAnimalCommonalities.Add(_this.wildAnimals()[index].animal, _this.wildAnimals()[index].commonality);
                 foreach (PawnKindDef pawnKindDef in DefDatabase<PawnKindDef>.AllDefs)
                 {
                     if (pawnKindDef.RaceProps.wildBiomes != null)
@@ -84,9 +153,9 @@ namespace CommunityCoreLibrary
             if (cachedPlantCommonalities == null)
             {
                 cachedPlantCommonalities = new Dictionary<ThingDef, float>();
-                for (int i = 0; i < wildPlants.Count; i++)
+                for (int i = 0; i < _this.wildPlants().Count; i++)
                 {
-                    cachedPlantCommonalities.Add(wildPlants[i].plant, wildPlants[i].commonality);
+                    cachedPlantCommonalities.Add(_this.wildPlants()[i].plant, _this.wildPlants()[i].commonality);
                 }
                 foreach (ThingDef current in DefDatabase<ThingDef>.AllDefs)
                 {
@@ -112,9 +181,9 @@ namespace CommunityCoreLibrary
             if (cachedDiseaseCommonalities == null)
             {
                 cachedDiseaseCommonalities = new Dictionary<IncidentDef, float>();
-                for (int i = 0; i < diseases.Count; i++)
+                for (int i = 0; i < _this.diseases().Count; i++)
                 {
-                    cachedDiseaseCommonalities.Add(diseases[i].diseaseInc, diseases[i].mtbDays);
+                    cachedDiseaseCommonalities.Add(_this.diseases()[i].diseaseInc, _this.diseases()[i].mtbDays);
                 }
                 foreach (IncidentDef current in DefDatabase<IncidentDef>.AllDefs)
                 {
