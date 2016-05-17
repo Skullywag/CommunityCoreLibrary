@@ -13,13 +13,13 @@ namespace CommunityCoreLibrary
 {
     internal static class _BiomeDef
     {
-        internal static FieldInfo _wildPlants;
         internal static FieldInfo _wildAnimals;
-        internal static FieldInfo _diseases;
+        internal static FieldInfo _wildPlants;
+        //internal static FieldInfo _diseases;
 
         internal static FieldInfo _cachedAnimalCommonalities;
         internal static FieldInfo _cachedPlantCommonalities;
-        internal static FieldInfo _cachedDiseaseCommonalities;
+        //internal static FieldInfo _cachedDiseaseCommonalities;
 
         #region Reflected Methods
 
@@ -28,13 +28,6 @@ namespace CommunityCoreLibrary
             if (_wildAnimals == null)
             {
                 _wildAnimals = typeof(BiomeDef).GetField("wildAnimals", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (_wildAnimals == null)
-                {
-                    CCL_Log.Trace(
-                        Verbosity.FatalErrors,
-                        "Unable to get field 'wildAnimals' in 'BiomeDef'",
-                        "Internal Detours");
-                }
             }
             return (List<BiomeAnimalRecord>)_wildAnimals.GetValue(obj);
         }
@@ -44,45 +37,24 @@ namespace CommunityCoreLibrary
             if (_wildPlants == null)
             {
                 _wildPlants = typeof(BiomeDef).GetField("wildPlants", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (_wildPlants == null)
-                {
-                    CCL_Log.Trace(
-                        Verbosity.FatalErrors,
-                        "Unable to get field 'wildPlants' in 'BiomeDef'",
-                        "Internal Detours");
-                }
             }
             return (List<BiomePlantRecord>)_wildPlants.GetValue(obj);
         }
 
-        internal static List<BiomeDiseaseRecord> diseases(this BiomeDef obj)
+        /*internal static List<BiomeDiseaseRecord> diseases(this BiomeDef obj)
         {
             if (_diseases == null)
             {
                 _diseases = typeof(BiomeDef).GetField("diseases", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (_diseases == null)
-                {
-                    CCL_Log.Trace(
-                        Verbosity.FatalErrors,
-                        "Unable to get field 'diseases' in 'BiomeDef'",
-                        "Internal Detours");
-                }
             }
             return (List<BiomeDiseaseRecord>)_diseases.GetValue(obj);
-        }
+        }*/
 
         internal static Dictionary<PawnKindDef, float> cachedAnimalCommonalities(this BiomeDef obj)
         {
             if (_cachedAnimalCommonalities == null)
             {
                 _cachedAnimalCommonalities = typeof(BiomeDef).GetField("cachedAnimalCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (_cachedAnimalCommonalities == null)
-                {
-                    CCL_Log.Trace(
-                        Verbosity.FatalErrors,
-                        "Unable to get field 'cachedAnimalCommonalities' in 'BiomeDef'",
-                        "Internal Detours");
-                }
             }
             return (Dictionary<PawnKindDef, float>)_cachedAnimalCommonalities.GetValue(obj);
         }
@@ -92,32 +64,18 @@ namespace CommunityCoreLibrary
             if (_cachedPlantCommonalities == null)
             {
                 _cachedPlantCommonalities = typeof(BiomeDef).GetField("cachedPlantCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (_cachedPlantCommonalities == null)
-                {
-                    CCL_Log.Trace(
-                        Verbosity.FatalErrors,
-                        "Unable to get field 'cachedPlantCommonalities' in 'BiomeDef'",
-                        "Internal Detours");
-                }
             }
-            return (Dictionary<ThingDef, float>)_cachedAnimalCommonalities.GetValue(obj);
+            return (Dictionary<ThingDef, float>)_cachedPlantCommonalities.GetValue(obj);
         }
 
-        internal static Dictionary<IncidentDef, float> cachedDiseaseCommonalities(this BiomeDef obj)
+        /*internal static Dictionary<IncidentDef, float> cachedDiseaseCommonalities(this BiomeDef obj)
         {
             if (_cachedDiseaseCommonalities == null)
             {
                 _cachedDiseaseCommonalities = typeof(BiomeDef).GetField("cachedDiseaseCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (_cachedDiseaseCommonalities == null)
-                {
-                    CCL_Log.Trace(
-                        Verbosity.FatalErrors,
-                        "Unable to get field 'cachedDiseaseCommonalities' in 'BiomeDef'",
-                        "Internal Detours");
-                }
             }
             return (Dictionary<IncidentDef, float>)_cachedDiseaseCommonalities.GetValue(obj);
-        }
+        }*/
 
         #endregion
 
@@ -177,7 +135,7 @@ namespace CommunityCoreLibrary
             return 0f;
         }
 
-        internal static float _MTBDaysOfDisease(this BiomeDef _this, IncidentDef diseaseInc)
+        /*internal static float _MTBDaysOfDisease(this BiomeDef _this, IncidentDef diseaseInc)
         {
             var cachedDiseaseCommonalities = _this.cachedDiseaseCommonalities();
             if (cachedDiseaseCommonalities == null)
@@ -192,8 +150,12 @@ namespace CommunityCoreLibrary
                     if (current.diseaseBiomeRecords != null)
                     {
                         for (int index = 0; index < current.diseaseBiomeRecords.Count; ++index)
+                        {
                             if (current.diseaseBiomeRecords[index].biome.defName == _this.defName)
+                            {
                                 cachedDiseaseCommonalities.Add(current.diseaseBiomeRecords[index].diseaseInc, current.diseaseBiomeRecords[index].mtbDays);
+                            }
+                        }
                     }
                 }
                 _this.cachedDiseaseCommonalitiesSet(cachedDiseaseCommonalities);
@@ -204,7 +166,7 @@ namespace CommunityCoreLibrary
                 return result;
             }
             return 9999999f;
-        }
+        }*/
 
         #endregion
 
@@ -219,21 +181,21 @@ namespace CommunityCoreLibrary
 
         internal static void cachedPlantCommonalitiesSet(this BiomeDef obj, Dictionary<ThingDef, float> value)
         {
-            if (_cachedAnimalCommonalities == null)
+            if (_cachedPlantCommonalities == null)
             {
-                _cachedAnimalCommonalities = typeof(BiomeDef).GetField("cachedAnimalCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+                _cachedPlantCommonalities = typeof(BiomeDef).GetField("cachedPlantCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
             }
-            _cachedAnimalCommonalities.SetValue(obj, value);
+            _cachedPlantCommonalities.SetValue(obj, value);
         }
 
-        internal static void cachedDiseaseCommonalitiesSet(this BiomeDef obj, Dictionary<IncidentDef, float> value)
+        /*internal static void cachedDiseaseCommonalitiesSet(this BiomeDef obj, Dictionary<IncidentDef, float> value)
         {
-            if (_cachedAnimalCommonalities == null)
+            if (_cachedDiseaseCommonalities == null)
             {
-                _cachedAnimalCommonalities = typeof(BiomeDef).GetField("cachedAnimalCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
+                _cachedDiseaseCommonalities = typeof(BiomeDef).GetField("cachedDiseaseCommonalities", BindingFlags.Instance | BindingFlags.NonPublic);
             }
-            _cachedAnimalCommonalities.SetValue(obj, value);
-        }
+            _cachedDiseaseCommonalities.SetValue(obj, value);
+        }*/
 
     }
 }

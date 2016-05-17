@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Security.Permissions;
@@ -246,19 +246,19 @@ namespace CommunityCoreLibrary
                 return false;
             }
             // Detour RimWorld.BiomeDef.CommonalityOfPlant
-            MethodInfo RimwWorld_BiomeDef_CommonalityOfPlantl = typeof(BiomeDef).GetMethod("CommonalityOfPlant", BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo RimwWorld_BiomeDef_CommonalityOfPlant = typeof(BiomeDef).GetMethod("CommonalityOfPlant", BindingFlags.Instance | BindingFlags.Public);
             MethodInfo CCL_BiomeDef_CommonalityOfPlantl = typeof(_BiomeDef).GetMethod("_CommonalityOfPlant", BindingFlags.Static | BindingFlags.NonPublic);
-            if (!Detours.TryDetourFromTo(RimwWorld_BiomeDef_CommonalityOfPlantl, CCL_BiomeDef_CommonalityOfPlantl))
+            if (!Detours.TryDetourFromTo(RimwWorld_BiomeDef_CommonalityOfPlant, CCL_BiomeDef_CommonalityOfPlantl))
             {
                 return false;
             }
             // Detour RimWorld.BiomeDef.MTBDaysOfDisease
-            MethodInfo RimwWorld_BiomeDef_MTBDaysOfDisease = typeof(BiomeDef).GetMethod("MTBDaysOfDisease", BindingFlags.Instance | BindingFlags.Public);
+            /*MethodInfo RimwWorld_BiomeDef_MTBDaysOfDisease = typeof(BiomeDef).GetMethod("MTBDaysOfDisease", BindingFlags.Instance | BindingFlags.Public);
             MethodInfo CCL_BiomeDef_MTBDaysOfDisease = typeof(_BiomeDef).GetMethod("_MTBDaysOfDisease", BindingFlags.Static | BindingFlags.NonPublic);
             if (!Detours.TryDetourFromTo(CCL_BiomeDef_MTBDaysOfDisease, CCL_BiomeDef_MTBDaysOfDisease))
             {
                 return false;
-            }
+            }*/
 
             // Detour RimWorld.MainTabWindow_Research.DrawLeftRect "NotFinished" predicate function
             // Use build number to get the correct predicate function
